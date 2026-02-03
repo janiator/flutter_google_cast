@@ -1,3 +1,100 @@
+## 1.2.9 - iOS Cast contentURL fix
+### 🐛 Fixes
+- Use `GCKMediaInformationBuilder(contentURL:)` instead of deprecated `contentID` to align with current Google Cast SDK and fix media load failures (including HLS) on iOS.
+
+## 1.2.8 - iOS HLS & Media Safety
+### 🐛 Fixes
+- Hardened iOS media parsing to avoid crashes from missing/invalid metadata; `fromMap` now bails out safely and treats infinite/NaN durations as zero.
+- Improved HLS playback support by mapping segment formats, honoring `startAbsoluteTime`, and correctly propagating `playPosition`, `startTime`, and `preloadTime` values.
+- Queue load options now respect fractional play positions, keeping live and buffered streams in sync.
+
+### 🧭 UX
+- Tweaked expanded player and mini controller behavior for live streams (slider, play/pause), improving control feedback during HLS playback.
+
+**Full Changelog**: https://github.com/felnanuke2/flutter_google_cast/compare/v1.2.7...v1.2.8
+
+## 1.2.7
+## What's Changed
+* Unknown track languages in m3u8 playlists cause player state events to be lost by @RabbitKabong in https://github.com/felnanuke2/flutter_google_cast/pull/46
+* Bump version to 1.2.7 in pubspec.yaml by @felnanuke2 in https://github.com/felnanuke2/flutter_google_cast/pull/48
+
+## New Contributors
+* @RabbitKabong made their first contribution in https://github.com/felnanuke2/flutter_google_cast/pull/46
+
+**Full Changelog**: https://github.com/felnanuke2/flutter_google_cast/compare/v1.2.6...v1.2.7
+
+## 1.2.6 - iOS Simulator Build Compatibility Fix
+### 🐛 Bug Fixes
+- **iOS Simulator Module Resolution**: Fixed "Module 'flutter_chrome_cast' not found" parse error that occurred during iOS simulator builds
+  - Issue affected only simulator builds; device builds and IPA generation worked correctly
+  - Added `DEFINES_MODULE=YES` to podspec for proper Swift module header generation
+  - Added `ENABLE_TESTING_SEARCH_PATHS=YES` to improve module resolution during simulator compilation
+  - Updated Google Cast SDK to ~> 4.8
+  - Maintains full compatibility with static framework linking for transitive Google Cast SDK dependencies
+
+### 🔧 Notes
+- No public API changes. This release focuses on build system compatibility for iOS simulator builds
+- Resolves issue #XX where users encountered "Module not found" errors on some machines while others were unaffected
+
+## 1.2.5 - iOS Apple Silicon Support & Enhanced Media Controls
+### ✨ New Features
+- **Missing Audio Control**: Added missing `stop` method for audio control in remote casting client
+  - Implements the stop functionality that was previously missing from the Android remote media client
+  - Fix contributed via PR #40 by @abdulmajedkhan
+
+### 🔧 Platform Improvements
+- **Apple Silicon Support**: Added full support for Apple Silicon (M1/M2/M3) Mac simulators
+  - Updated Google Cast SDK dependency from `google-cast-sdk-no-bluetooth` to standard `google-cast-sdk` ~> 4.7
+  - Removed arm64 simulator architecture exclusions that prevented builds on Apple Silicon
+  - Fixes contributed via PR #39 by @SVyatoslavG and @nsikaktradearies
+- **iOS Deployment Target**: Bumped minimum iOS deployment target to 13.0 to align with modern platform requirements
+- **Enhanced Logging**: Improved debug logging capabilities with conditional debug print statements
+
+### 🚀 Performance & Developer Experience
+- **Faster Plugin Initialization**: Returns Flutter plugin result earlier during initialization for faster feedback
+- **Conditional Logging**: Gated console logging behind debug flags to reduce noise in production builds
+- **Better Discovery**: Enhanced device discovery initialization and lifecycle management
+
+### 🔧 Technical Updates
+- **CocoaPods Integration**: Updated CocoaPods and Xcode project metadata to reflect dependency changes
+- **Build System**: Improved build phases and linker configuration for better compatibility
+
+### 🔧 Notes
+- No breaking API changes. This release focuses on platform compatibility and missing functionality
+- Existing projects may need to update their iOS deployment target to 13.0 for optimal compatibility
+
+## 1.2.4 - Misc fixes and Android method channel improvements
+### 🐛 Bug Fixes
+- **Android remote media client**: Fixes in `android_remote_media_client_method_channel.dart` to address method channel behavior when loading single media items.
+- **Example fixes**: Minor example app updates to `example/lib/main.dart` and `example/android/app/build.gradle` to keep the sample project in sync with the plugin changes.
+- **Pubspec tidy**: Updated `pubspec.yaml` to reflect dependency/metadata housekeeping.
+
+### 🔧 Notes
+- No public API breaking changes. This release contains internal fixes and example updates.
+
+## 1.2.3 - iOS Teardown Crash Fix
+### 🐛 Bug Fixes
+- **iOS Teardown Safety**: Safely teardown Google Cast listeners on iOS to avoid a crash when the app terminates.
+  - Fix merged via pull request #32: https://github.com/felnanuke2/flutter_google_cast/pull/32
+
+### 🔧 Notes
+- No public API changes. This is a small internal lifecycle fix for iOS listener teardown.
+
+## 1.2.2 - Repeat Mode Bug Fix
+### 🐛 Bug Fixes
+### 🐛 Bug Fixes
+- **Cross-Platform Repeat Mode Fix**: Fixed repeat mode handling across Android and iOS platforms
+  - **Android**: Updated repeat mode parsing to use string-based values instead of integer mapping
+  - **iOS**: Fixed GCKMediaQueueLoadOptions repeat mode enum parsing to handle string values
+  - **Dart**: Enhanced GoogleCastMediaRepeatMode enum with proper string value mapping
+  - **Consistency**: Ensured consistent repeat mode behavior across all platforms
+
+### 🔧 Code Improvements
+- **Removed Platform-Specific Code**: Eliminated Android-specific repeat mode extensions for cleaner architecture
+- **Type Safety**: Improved type safety in repeat mode handling with proper string-to-enum conversion
+- **Code Formatting**: Applied consistent code formatting and styling improvements
+
+
 ## 1.2.1 - Documentation & Testing Improvements
 ### 📚 Documentation Enhancements
 - **Expanded API Documentation**: Added comprehensive documentation for public members across all Dart classes
